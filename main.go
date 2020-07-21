@@ -2,37 +2,46 @@ package main
 
 import (
 	"fmt"
-	"github.com/gocolly/colly"
-	"github.com/web-scraping/pkg/utils"
+	logr "github.com/sirupsen/logrus"
+	"github.com/web-scraping/pkg/actions"
+
+	"net/http"
 )
 
 func main() {
-	c := colly.NewCollector()
+	//actions.Scrape()
+	//actions.Crawl()
 
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting", r.URL)
-	})
+	// Create the first route handler listening on '/'
+	http.HandleFunc("/", handler)
 
-	c.OnHTML("div.s-result-list.s-search-results.sg-row", func(e *colly.HTMLElement) {
-		e.ForEach("div.a-section.a-spacing-medium", func(_ int, e *colly.HTMLElement) {
-			var productName, stars, price string
+	http.HandleFunc("/scrape", actions.Scrape)
+	http.HandleFunc("/crawl", actions.Crawl)
 
-			productName = e.ChildText("span.a-size-medium.a-color-base.a-text-normal")
+	logr.Info("Starting up on 8080")
 
-			if productName == "" {
-				// If we can't get any name, we return and go directly to the next element
-				return
-			}
+	// Start the sever
+	http.ListenAndServe(":8080", nil)
 
-			stars = e.ChildText("span.a-icon-alt")
-			utils.FormatStars(&stars)
-
-			price = e.ChildText("span.a-price > span.a-offscreen")
-			//utils.FormatPrice(&price)
-
-			fmt.Printf("Product Name: %s \nStars: %s \nPrice: %s \n", productName, stars, price)
-		})
-	})
-
-	c.Visit("https://www.amazon.co.uk/s?k=gopro&ref=nb_sb_noss_2")
 }
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	// Assign a variable with a string
+	msg := "Hello, welcome to your app. Use the folling suffix's on the URL to show the different results.\n1)'/scrape' to show results of web scraping.\n2)'/crawl' to show results of a web crawler"
+
+	// Logs a message to the terminal using the 3rd party import logrus
+	logr.Info("Received request for the home page")
+
+	// Write the response to the byte array - Sprintf formats and returns a string without printing it anywhere
+	w.Write([]byte(fmt.Sprintf(msg)))
+}
+
+
+//func Scraper(w http.ResponseWriter, r *http.Request) {
+//	// Write the status code 200
+//	w.WriteHeader(http.StatusOK)
+//
+//	// Write the response to the byte array - Sprintf formats and returns a string without printing it anywhere
+//	w.Write([]byte(fmt.Sprintf("hello")))
+//	logr.Info("hello")
+//}
