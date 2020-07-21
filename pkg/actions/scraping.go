@@ -62,28 +62,11 @@ func Scrape(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		//fmt.Println(string(result))
-		//err = ioutil.WriteFile("test.json", result,0644)
-		//if err != nil {
-		//	fmt.Println(err)
-		//	os.Exit(1)
-		//}
 
 		// Write the response to the byte array - Sprintf formats and returns a string without printing it anywhere
 		w.Write([]byte(fmt.Sprintf(string(result))))
 	})
 
 	c.Visit("https://www.amazon.co.uk/s?k=gopro&ref=nb_sb_noss_2")
-
-	//arg := os.Args[1]
-	//path := "./test.json"
-	//if arg == "delete" {
-	//	//fmt.Printf("delete file..)
-	//	err := os.Remove(path)
-	//	if err != nil {
-	//		fmt.Println(err)
-	//		return
-	//	}
-	//}
 
 }

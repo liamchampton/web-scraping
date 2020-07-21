@@ -9,8 +9,6 @@ import (
 )
 
 func main() {
-	//actions.Scrape()
-	//actions.Crawl()
 
 	// Create the first route handler listening on '/'
 	http.HandleFunc("/", handler)
@@ -26,7 +24,6 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	// Assign a variable with a string
 	msg := "Hello, welcome to your app. Use the folling suffix's on the URL to show the different results.\n1)'/scrape' to show results of web scraping.\n2)'/crawl' to show results of a web crawler"
 
 	// Logs a message to the terminal using the 3rd party import logrus
@@ -35,13 +32,3 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// Write the response to the byte array - Sprintf formats and returns a string without printing it anywhere
 	w.Write([]byte(fmt.Sprintf(msg)))
 }
-
-
-//func Scraper(w http.ResponseWriter, r *http.Request) {
-//	// Write the status code 200
-//	w.WriteHeader(http.StatusOK)
-//
-//	// Write the response to the byte array - Sprintf formats and returns a string without printing it anywhere
-//	w.Write([]byte(fmt.Sprintf("hello")))
-//	logr.Info("hello")
-//}
